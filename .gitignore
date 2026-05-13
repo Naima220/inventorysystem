@@ -1,0 +1,31 @@
+/node_modules
+/vendor
+/public/storage
+/public/hot
+/storage/*.key
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# Custom Experimental Files & Scripts
+/scratch/
+/check_users.php
+/fix_domains.php
+/fix_shop4_email.php
+/fix_shop4_shop5.php
+/direct_user_fix.php
+/test.html
+
+# Logs and Framework
+/storage/*.log
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+
+# Tenant Assets
+/storage/app/public/tenant*
