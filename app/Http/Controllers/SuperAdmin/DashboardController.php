@@ -195,9 +195,14 @@ public function storeShop(Request $request)
         'admin_password' => $request->admin_password, // Saved in central DB for Super Admin
     ]);
 
-    // Create Domain (e.g. shop1.mine-market.test)
+    // Create Domain (e.g. shop1.minemarket.com)
     $centralDomains = config('tenancy.central_domains');
-    $centralDomain = end($centralDomains); // mine-market.test
+    
+    // Find the first domain that is not an IP and doesn't start with www.
+    $centralDomain = collect($centralDomains)->first(function ($domain) {
+        return !filter_var($domain, FILTER_VALIDATE_IP) && !str_starts_with($domain, 'www.');
+    }) ?? 'minemarket.com';
+
     $shop->domains()->create([
         'domain' => strtolower($shopId) . '.' . $centralDomain
     ]);
@@ -256,6 +261,7 @@ public function storeShop(Request $request)
         tenancy()->end();
 
         // 6. Redirect to the impersonation URL
-        return redirect('http://' . $domain . '/tenancy/impersonate/' . $token->token);
+        $scheme = request()->secure() ? 'https://' : 'http://';
+        return redirect($scheme . $domain . '/tenancy/impersonate/' . $token->token);
     }
 }

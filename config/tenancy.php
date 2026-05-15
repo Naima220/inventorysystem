@@ -20,6 +20,8 @@ return [
         '127.0.0.1',
         'localhost',
         'mine-market.test',
+        'minemarket.com',
+        'www.minemarket.com',
     ],
 
     /**
