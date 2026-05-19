@@ -195,13 +195,13 @@ public function storeShop(Request $request)
         'admin_password' => $request->admin_password, // Saved in central DB for Super Admin
     ]);
 
-    // Create Domain (e.g. shop1.minemarket.com)
+    // Create Domain (e.g. shop1.minemarket.tech)
     $centralDomains = config('tenancy.central_domains');
     
     // Find the first domain that is not an IP and doesn't start with www.
     $centralDomain = collect($centralDomains)->first(function ($domain) {
         return !filter_var($domain, FILTER_VALIDATE_IP) && !str_starts_with($domain, 'www.');
-    }) ?? 'minemarket.com';
+    }) ?? 'minemarket.tech';
 
     $shop->domains()->create([
         'domain' => strtolower($shopId) . '.' . $centralDomain
