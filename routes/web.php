@@ -74,3 +74,35 @@ Route::post('/chatbot', [ChatbotController::class, 'reply']);
 
 // ✅ Auth routes (login, register, logout, etc.)
 require __DIR__.'/auth.php';
+
+// Temporary Deployment Helper Route (Automates .env edit and cache clear)
+Route::get('/deploy-helper', function (\Illuminate\Http\Request $request) {
+    if ($request->query('secret') !== 'deploy143') {
+        abort(403);
+    }
+
+    $envPath = base_path('.env');
+    if (!file_exists($envPath)) {
+        return 'No .env file found';
+    }
+
+    $envContent = file_get_contents($envPath);
+    
+    // Comment out SESSION_DOMAIN
+    if (str_contains($envContent, "SESSION_DOMAIN=.minemarket.tech") && !str_contains($envContent, "# SESSION_DOMAIN=.minemarket.tech")) {
+        $envContent = str_replace("SESSION_DOMAIN=.minemarket.tech", "# SESSION_DOMAIN=.minemarket.tech", $envContent);
+        file_put_contents($envPath, $envContent);
+        $message = "SESSION_DOMAIN has been successfully commented out in .env!\n";
+    } else {
+        $message = "SESSION_DOMAIN was already commented out or not active.\n";
+    }
+
+    // Clear caches
+    \Illuminate\Support\Facades\Artisan::call('config:clear');
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    
+    $message .= "Configuration and Cache cleared successfully!";
+    
+    return response($message)->header('Content-Type', 'text/plain');
+});
+
