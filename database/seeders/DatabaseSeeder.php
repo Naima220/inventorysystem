@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
 
         // 2️⃣ Abuur Super Admin user
         $superAdmin = User::firstOrCreate(
-            ['email' => 'superadmin@example.com'],
+            ['email' => 'superadmin119@gmail.com'],
             [
                 'name' => 'Super Admin',
-                'password' => bcrypt('password'), // change password later
+                'password' => bcrypt('SuperAdmin143@#'), // change password later
             ]
         );
         $superAdmin->syncRoles([$superAdminRole]);
