@@ -261,7 +261,7 @@ public function storeShop(Request $request)
         tenancy()->end();
 
         // 6. Redirect to the impersonation URL
-        $scheme = request()->secure() ? 'https://' : 'http://';
+        $scheme = (request()->secure() || str_starts_with(config('app.url'), 'https://')) ? 'https://' : 'http://';
         return redirect($scheme . $domain . '/tenancy/impersonate/' . $token->token);
     }
 }
