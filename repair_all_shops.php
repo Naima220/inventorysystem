@@ -1,14 +1,34 @@
 <?php
 /**
  * REPAIR ALL SHOPS — Direct PDO, no Laravel bootstrap
+ * Automatically reads credentials from .env file
  * Usage: php repair_all_shops.php
  */
 
-$mysqlHost = '127.0.0.1';
-$mysqlPort = '3306';
-$mysqlDb   = 'ims';
-$mysqlUser = 'root';
-$mysqlPass = '';
+// ── Read .env file ───────────────────────────────────────────
+function readEnv(string $path): array {
+    $vars = [];
+    if (!file_exists($path)) return $vars;
+    foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#')) continue;
+        if (!str_contains($line, '=')) continue;
+        [$key, $val] = explode('=', $line, 2);
+        $vars[trim($key)] = trim($val, " \t\"'");
+    }
+    return $vars;
+}
+
+$env = readEnv(__DIR__ . '/.env');
+
+$mysqlHost   = $env['DB_HOST']     ?? '127.0.0.1';
+$mysqlPort   = $env['DB_PORT']     ?? '3306';
+$mysqlDb     = $env['DB_DATABASE'] ?? 'ims';
+$mysqlUser   = $env['DB_USERNAME'] ?? 'root';
+$mysqlPass   = $env['DB_PASSWORD'] ?? '';
+$dbPrefix    = $env['TENANT_DB_PREFIX'] ?? 'tenant';
+
+echo "=== ENV: {$mysqlUser}@{$mysqlHost}:{$mysqlPort}/{$mysqlDb} ===\n\n";
 
 echo "=== CONNECTING TO MYSQL ===\n";
 try {
@@ -32,7 +52,7 @@ foreach ($shops as $shop) {
 
     // Determine SQLite path — stancl uses prefix + shop_id
     // Check both naming conventions (with and without tenancy_db_name)
-    $dbName  = $data['tenancy_db_name'] ?? ('tenant' . $shopId);
+    $dbName  = $data['tenancy_db_name'] ?? ($dbPrefix . $shopId);
     $dbPath  = __DIR__ . '/database/' . $dbName;
 
     echo "=== Shop: {$shopId} | {$shop['name']} ===\n";
