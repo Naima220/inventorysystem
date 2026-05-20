@@ -45,10 +45,13 @@ class MigrateShopsToTenants extends Command
                     'subscription_ends_at' => $oldShop->subscription_ends_at,
                 ]);
 
-                // Create Domain
-                $centralDomain = config('tenancy.central_domains')[0];
+                // Create Domain dynamically based on APP_URL
+                $appUrl = config('app.url');
+                $centralDomain = parse_url($appUrl, PHP_URL_HOST) ?? 'localhost';
+                $centralDomain = explode(':', $centralDomain)[0];
+
                 $shop->domains()->create([
-                    'domain' => $tenantId . '.' . $centralDomain
+                    'domain' => strtolower($tenantId) . '.' . $centralDomain
                 ]);
                 $this->info("Created Tenant and Domain for {$oldShop->name}");
             } else {

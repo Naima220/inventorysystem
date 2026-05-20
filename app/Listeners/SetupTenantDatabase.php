@@ -5,8 +5,7 @@ namespace App\Listeners;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Stancl\Tenancy\Events\DatabaseCreated;
-use Illuminate\Support\Facades\Artisan;
+use Stancl\Tenancy\Events\DatabaseMigrated;
 use Illuminate\Support\Facades\Log;
 
 class SetupTenantDatabase
@@ -14,29 +13,22 @@ class SetupTenantDatabase
     /**
      * Handle the event.
      *
-     * @param DatabaseCreated $event
+     * @param DatabaseMigrated $event
      * @return void
      */
-    public function handle(DatabaseCreated $event)
+    public function handle(DatabaseMigrated $event)
     {
         $tenant = $event->tenant;
 
         try {
-            // 1. Run migrations for the new tenant
-            // We use --force to ensure it runs in all environments
-            Artisan::call('tenants:migrate', [
-                '--tenants' => $tenant->id,
-                '--force' => true,
-            ]);
-
-            // 2. Initialize tenancy to perform database operations
+            // 1. Initialize tenancy to perform database operations
             tenancy()->initialize($tenant);
 
-            // 3. Clear Spatie Permission Cache
+            // 2. Clear Spatie Permission Cache
             // This is CRITICAL for multi-tenancy to avoid "Role not found" errors
             app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-            // 4. Create Basic Roles (Admin and User)
+            // 3. Create Basic Roles (Admin and User)
             // We specify the guard explicitly to avoid ambiguity
             $adminRole = Role::firstOrCreate(
                 ['name' => 'Admin', 'guard_name' => 'web']
@@ -46,21 +38,28 @@ class SetupTenantDatabase
                 ['name' => 'User', 'guard_name' => 'web']
             );
 
-            // 5. Create the Admin User
-            // Using data stored in the tenant/shop model
-            $user = User::create([
-                'name'     => $tenant->owner_name,
-                'email'    => $tenant->admin_email,
-                'password' => Hash::make($tenant->admin_password),
-            ]);
+            // 4. Create the Admin User using data stored in the tenant/shop model
+            if ($tenant->admin_email) {
+                $user = User::where('email', $tenant->admin_email)->first();
+                if (!$user) {
+                    $user = User::create([
+                        'name'     => $tenant->owner_name ?? 'Admin User',
+                        'email'    => $tenant->admin_email,
+                        'password' => Hash::make($tenant->admin_password ?? 'password'),
+                    ]);
 
-            // 6. Assign the Admin Role
-            $user->assignRole($adminRole);
+                    // Assign the Admin Role
+                    $user->assignRole($adminRole);
+                    Log::info("Successfully created admin user {$tenant->admin_email} for tenant: {$tenant->id}");
+                } else {
+                    Log::info("Admin user {$tenant->admin_email} already exists for tenant: {$tenant->id}");
+                }
+            }
 
-            // 7. End tenancy to return to central context
+            // 5. End tenancy to return to central context
             tenancy()->end();
 
-            Log::info("Successfully set up database and admin for tenant: {$tenant->id}");
+            Log::info("Successfully set up database roles/admin user for tenant: {$tenant->id}");
 
         } catch (\Exception $e) {
             Log::error("Error setting up tenant database ({$tenant->id}): " . $e->getMessage());

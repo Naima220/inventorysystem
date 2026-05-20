@@ -66,10 +66,13 @@ class ResetShops extends Command
                 'admin_password' => 'password',
             ]);
 
-            // Create Domain
-            $centralDomain = config('tenancy.central_domains')[0];
+            // Create Domain dynamically based on APP_URL
+            $appUrl = config('app.url');
+            $centralDomain = parse_url($appUrl, PHP_URL_HOST) ?? 'localhost';
+            $centralDomain = explode(':', $centralDomain)[0];
+
             $shop->domains()->create([
-                'domain' => $data['id'] . '.' . $centralDomain
+                'domain' => strtolower($data['id']) . '.' . $centralDomain
             ]);
 
             // Initialize and seed first user

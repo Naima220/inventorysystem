@@ -97,24 +97,15 @@ return [
             'prefix_indexes' => true,
         ],
 
+        // ========================================================
+        // TENANT connection template — used for SQLite per-shop DBs
+        // The 'database' path is set dynamically by stancl/tenancy
+        // SQLite files are stored in: database/tenant{id}
+        // ========================================================
         'tenant_template' => [
-            'driver' => env('TENANT_DB_DRIVER', 'mysql'),
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => null, // This will be set dynamically by stancl/tenancy
-            'username' => env('TENANT_DB_DRIVER', 'mysql') === 'sqlite' ? null : env('DB_USERNAME', 'root'),
-            'password' => env('TENANT_DB_DRIVER', 'mysql') === 'sqlite' ? null : env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => env('TENANT_DB_DRIVER', 'mysql') === 'sqlite' ? [] : (extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : []),
+            'driver'                  => 'sqlite',
+            'database'                => null, // dynamically set by SQLiteDatabaseManager
+            'prefix'                  => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 

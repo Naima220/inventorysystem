@@ -31,11 +31,11 @@ return [
      * To configure their behavior, see the config keys below.
      */
     'bootstrappers' => [
+        // ✅ Only database bootstrapper — others cause errors on shared hosting + SQLite
         Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper::class,
-        Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper::class,
-        Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper::class,
-        Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper::class,
-        // Stancl\Tenancy\Bootstrappers\RedisTenancyBootstrapper::class, // Note: phpredis is needed
+        // Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper::class, // disabled — causes "local" key error
+        // Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper::class, // disabled — causes "local" key error
+        // Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper::class, // disabled — not needed
     ],
 
     /**
@@ -54,7 +54,7 @@ return [
          * Tenant database names are created like this:
          * prefix + tenant_id + suffix.
          */
-        'prefix' => 'tenant',
+        'prefix' => env('TENANT_DB_PREFIX', 'tenant'),
         'suffix' => '',
 
         /**
