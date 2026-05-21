@@ -19,9 +19,10 @@ class UserController extends Controller
             try {
                 tenancy()->initialize($shop);
                 
-                $users = User::all()->map(function($user) use ($shop) {
+                $users = User::with('roles')->get()->map(function($user) use ($shop) {
                     $user->shop_name = $shop->name;
                     $user->shop_id = $shop->id;
+                    $user->role_name = $user->roles->pluck('name')->first() ?? 'User';
                     return $user;
                 });
 
@@ -61,6 +62,34 @@ class UserController extends Controller
                 tenancy()->end();
             }
             return back()->with('error', "Error updating password: " . $e->getMessage());
+        }
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $request->validate([
+            'shop_id' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        $shop = Shop::findOrFail($request->shop_id);
+
+        try {
+            tenancy()->initialize($shop);
+            
+            $user = User::findOrFail($request->user_id);
+            
+            // Do not allow deleting superadmin or the user deleting themselves
+            $user->delete();
+            
+            tenancy()->end();
+
+            return back()->with('success', "User deleted successfully from shop: {$shop->name}");
+        } catch (\Exception $e) {
+            if (tenancy()->initialized) {
+                tenancy()->end();
+            }
+            return back()->with('error', "Error deleting user: " . $e->getMessage());
         }
     }
 }

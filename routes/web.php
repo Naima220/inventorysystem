@@ -57,6 +57,7 @@ Route::middleware(['auth', 'role:super_admin'])
         // Shop Users Management
         Route::get('/shop-users', [\App\Http\Controllers\SuperAdmin\UserController::class, 'index'])->name('users.index');
         Route::post('/shop-users/change-password', [\App\Http\Controllers\SuperAdmin\UserController::class, 'changePassword'])->name('users.changePassword');
+        Route::post('/shop-users/delete', [\App\Http\Controllers\SuperAdmin\UserController::class, 'deleteUser'])->name('users.delete');
     });
 
 // ✅ Shop resource (Super Admin)

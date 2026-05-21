@@ -17,14 +17,14 @@
 
     <style>
         :root {
-            --sidebar-bg: #143a59;
-            --sidebar-bg-grad: #143a59;
+            --sidebar-bg: #0b223f;
+            --sidebar-bg-grad: #0b223f;
             --topbar-bg: #ffffff;
             --page-bg: #f4f7f6;
             --primary-blue: #0d6efd;
             --sidebar-text: #ffffff;
             --sidebar-text-muted: rgba(255, 255, 255, 0.7);
-            --sidebar-hover: rgba(255, 255, 255, 0.15);
+            --sidebar-hover: rgba(255, 255, 255, 0.08);
         }
 
         body {
@@ -50,9 +50,26 @@
         .sb-topnav .navbar-brand {
             width: 250px;
             font-weight: 700;
-            color: #143a59 !important;
+            color: #0b223f !important;
             padding-left: 25px;
             margin: 0;
+        }
+
+        /* Hamburger button style match screenshot */
+        #sidebarToggle {
+            border: 1.5px solid #0d6efd !important;
+            color: #0d6efd !important;
+            border-radius: 6px;
+            padding: 5px 9px;
+            background-color: transparent;
+            transition: all 0.2s ease;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #sidebarToggle:hover {
+            background-color: rgba(13, 110, 253, 0.1) !important;
         }
 
         /* LAYOUT STRUCTURE */
@@ -64,14 +81,14 @@
         #layoutSidenav_nav {
             flex-basis: 250px;
             flex-shrink: 0;
-            background: var(--sidebar-bg-grad);
+            background: var(--sidebar-bg-grad) !important;
             position: fixed;
             top: 56px;
             bottom: 0;
             left: 0;
             width: 250px;
             z-index: 1000;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #layoutSidenav_content {
@@ -81,7 +98,7 @@
             display: flex;
             flex-direction: column;
             padding: 25px;
-            transition: margin-left 0.3s ease;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* SIDEBAR NAV */
@@ -90,42 +107,61 @@
             overflow-y: auto;
         }
 
-        .sb-sidenav-menu-heading {
+        .sb-sidenav-dark {
+            background-color: #0b223f !important;
+        }
+
+        .sb-sidenav-dark .sb-sidenav-menu-heading {
             padding: 24px 25px 8px;
             font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--sidebar-text-muted);
+            color: rgba(255, 255, 255, 0.5) !important;
         }
 
-        .sb-sidenav .nav-link {
+        .sb-sidenav-dark .nav-link {
             display: flex;
             align-items: center;
             padding: 13px 25px;
             color: var(--sidebar-text) !important;
             text-decoration: none;
             font-size: 0.92rem;
-            transition: background 0.2s;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
             position: relative;
         }
 
-        .sb-sidenav .nav-link:hover {
-            background-color: var(--sidebar-hover);
+        .sb-sidenav-dark .nav-link:hover {
+            background-color: var(--sidebar-hover) !important;
+            color: #ffffff !important;
         }
 
-        .sb-sidenav .sb-nav-link-icon {
+        .sb-sidenav-dark .sb-nav-link-icon {
             margin-right: 18px;
             width: 22px;
             text-align: center;
             font-size: 1.05rem;
+            color: #ffffff !important;
+            opacity: 0.9;
+        }
+
+        /* Lighter blue active link highlight */
+        .sb-sidenav-dark .nav-link.active {
+            background-color: #17436b !important;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        .sb-sidenav-dark .nav-link.active .sb-nav-link-icon {
+            opacity: 1;
         }
 
         /* DROPDOWN ARROWS */
-        .sb-sidenav .sb-sidenav-collapse-arrow {
+        .sb-sidenav-dark .sb-sidenav-collapse-arrow {
             margin-left: auto;
             transition: transform 0.3s ease;
             font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8) !important;
         }
 
         /* Point RIGHT by default (collapsed) */
@@ -140,21 +176,27 @@
 
         /* SUBMENU */
         .sb-sidenav-menu-nested {
-            padding-left: 30px;
-            background: rgba(0,0,0,0.08);
+            padding-left: 15px !important;
+            background: rgba(0, 0, 0, 0.15) !important;
         }
 
         .sb-sidenav-menu-nested .nav-link {
-            padding: 10px 20px;
-            font-size: 0.88rem;
-            color: var(--sidebar-text-muted) !important;
+            padding: 8px 20px !important;
+            font-size: 0.88rem !important;
+            color: rgba(255, 255, 255, 0.8) !important;
         }
 
         .sb-sidenav-menu-nested .nav-link:hover {
             color: var(--sidebar-text) !important;
         }
 
-        /* TOGGLE BEHAVIOR */
+        .sb-sidenav-menu-nested .nav-link.active {
+            background-color: transparent !important;
+            color: #3b82f6 !important;
+            font-weight: 600;
+        }
+
+        /* TOGGLE BEHAVIOR (DESKTOP) */
         body.sb-sidenav-toggled #layoutSidenav_nav {
             transform: translateX(-250px);
         }
@@ -163,14 +205,16 @@
             margin-left: 0;
         }
 
-        /* RESPONSIVE */
+        /* RESPONSIVE & MOBILE SLIDE FROM LEFT */
         @media (max-width: 991.98px) {
             #layoutSidenav_nav {
                 transform: translateX(-250px);
                 position: fixed; /* Ensure it stays fixed on mobile too */
                 height: 100vh;
                 top: 0; /* Cover full height on mobile */
-                box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+                width: 250px;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.25);
+                z-index: 1040; /* Sit above navbar */
             }
             #layoutSidenav_content {
                 margin-left: 0;
@@ -191,7 +235,7 @@
                 right: 0;
                 bottom: 0;
                 background: rgba(0,0,0,0.5);
-                z-index: 999;
+                z-index: 1035; /* Sit just below mobile sidebar */
                 display: block;
             }
         }
@@ -583,27 +627,45 @@
         setDarkModeState(false);
     }
 
-    // Robust Sidebar Toggle Fix
+    // Robust Sidebar Toggle Fix & Active Highlighting
     $(document).ready(function() {
         const $body = $('body');
         const $sidebarToggle = $('#sidebarToggle');
         
-        $sidebarToggle.on('click', function(e) {
+        $sidebarToggle.off('click').on('click', function(e) {
             e.preventDefault();
             $body.toggleClass('sb-sidenav-toggled');
-            
-            // For the backdrop effect on layoutSidenav
             $('#layoutSidenav').toggleClass('sb-sidenav-toggled');
         });
 
-        // Close sidebar when clicking on backdrop (mobile only)
-        $(document).on('click', function(e) {
+        // Close sidebar when clicking outside on mobile
+        $(document).on('click touchstart', function(e) {
             if ($(window).width() < 992) {
-                if ($body.hasClass('sb-sidenav-toggled') && 
-                    !$(e.target).closest('#layoutSidenav_nav').length && 
-                    !$(e.target).closest('#sidebarToggle').length) {
-                    $body.removeClass('sb-sidenav-toggled');
-                    $('#layoutSidenav').removeClass('sb-sidenav-toggled');
+                if ($body.hasClass('sb-sidenav-toggled')) {
+                    if (!$(e.target).closest('#layoutSidenav_nav').length && 
+                        !$(e.target).closest('#sidebarToggle').length) {
+                        $body.removeClass('sb-sidenav-toggled');
+                        $('#layoutSidenav').removeClass('sb-sidenav-toggled');
+                    }
+                }
+            }
+        });
+
+        // Highlight active sidebar links and auto-expand collapses
+        const currentUrl = window.location.href.split('?')[0];
+        $('#layoutSidenav_nav .nav-link').each(function() {
+            const href = this.href;
+            if (href && href !== '#' && !href.startsWith('javascript:')) {
+                if (currentUrl === href || currentUrl.startsWith(href + '/') || (href.includes('/dashboard') && currentUrl.includes('/dashboard'))) {
+                    $(this).addClass('active');
+                    
+                    const $parentCollapse = $(this).closest('.collapse');
+                    if ($parentCollapse.length) {
+                        $parentCollapse.addClass('show');
+                        const collapseId = $parentCollapse.attr('id');
+                        const $parentToggler = $('[data-target="#' + collapseId + '"]');
+                        $parentToggler.removeClass('collapsed').addClass('active');
+                    }
                 }
             }
         });

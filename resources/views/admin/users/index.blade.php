@@ -43,12 +43,13 @@
                                         {{-- Role Badge --}}
                                         <td class="text-center">
                                             @php
-                                                $roleName = $user->roles->pluck('name')->first();
-                                                $badgeClass = match($roleName) {
+                                                $roleName = $user->roles->pluck('name')->first() ?? 'User';
+                                                $badgeClass = match(strtolower($roleName)) {
                                                     'super_admin' => 'badge-danger',
-                                                    'Admin'       => 'badge-success',
-                                                    'User'        => 'badge-secondary',
-                                                    default       => 'badge-dark',
+                                                    'admin'       => 'badge-primary',
+                                                    'manager'     => 'badge-success',
+                                                    'user'        => 'badge-secondary',
+                                                    default       => 'badge-secondary',
                                                 };
                                             @endphp
                                             <span class="badge {{ $badgeClass }}">
@@ -59,34 +60,30 @@
                                         <td class="text-center">{{ $user->created_at->format('d-m-Y') }}</td>
 
                                         {{-- Actions --}}
-                                        {{-- Actions --}}
                                         <td class="text-center">
-                                            <div class="d-flex flex-column flex-md-row justify-content-center gap-2">
+                                            <div class="d-flex align-items-center justify-content-center gap-2">
                                                 @php
                                                     $currentUser = auth()->user();
                                                     $targetRole = strtolower($user->roles->pluck('name')->first() ?? '');
                                                     
-                                                    // Admins can ONLY be edited
-                                                    // Users can be edited AND deleted
                                                     $isTargetAdmin = ($targetRole === 'admin' || $targetRole === 'super_admin');
-                                                    $isTargetUser = ($targetRole === 'user');
                                                     
                                                     $canEdit = $currentUser->hasAnyRole(['super_admin', 'Admin', 'admin']);
-                                                    $canDelete = ($canEdit && $isTargetUser);
+                                                    $canDelete = ($canEdit && !$isTargetAdmin && $user->id !== $currentUser->id);
                                                 @endphp
 
                                                 @if($canEdit)
-                                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-warning">
+                                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-primary">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                 @endif
 
                                                 @if($canDelete)
-                                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="d-inline-block">
+                                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');" class="d-inline-block m-0">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-danger">
-                                                            <i class="fas fa-trash"></i> Delete
+                                                            <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>
                                                 @endif

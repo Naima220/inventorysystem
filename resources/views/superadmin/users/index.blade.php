@@ -15,30 +15,47 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Shop</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Shop</th>
                             <th>Role</th>
-                            <th>Actions</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($allUsers as $user)
                         <tr>
-                            <td>{{ $user['shop_name'] }} <small class="text-muted">({{ $user['shop_id'] }})</small></td>
                             <td>{{ $user['name'] }}</td>
-                            <td>{{ $user['email'] }}</td>
+                            <td class="text-break">{{ $user['email'] }}</td>
+                            <td>{{ $user['shop_name'] }} <small class="text-muted">({{ $user['shop_id'] }})</small></td>
                             <td>
                                 @php
-                                    // Note: roles are stored in tenant DB, we'd need to handle this differently 
-                                    // if we wanted to show roles properly here, but for now we show name/email.
+                                    $roleName = $user['role_name'] ?? 'User';
+                                    $badgeClass = match(strtolower($roleName)) {
+                                        'super_admin' => 'badge-danger',
+                                        'admin'       => 'badge-primary',
+                                        'manager'     => 'badge-success',
+                                        'user'        => 'badge-secondary',
+                                        default       => 'badge-secondary',
+                                    };
                                 @endphp
-                                <span class="badge badge-info">User</span>
+                                <span class="badge {{ $badgeClass }}">{{ ucfirst($roleName) }}</span>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#passwordModal{{ $user['shop_id'] }}{{ $user['id'] }}">
-                                    <i class="fas fa-key"></i> Change Password
-                                </button>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#passwordModal{{ $user['shop_id'] }}{{ $user['id'] }}">
+                                        <i class="fas fa-key"></i> Edit
+                                    </button>
+
+                                    <form action="{{ route('superadmin.users.delete') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');" class="d-inline-block m-0">
+                                        @csrf
+                                        <input type="hidden" name="shop_id" value="{{ $user['shop_id'] }}">
+                                        <input type="hidden" name="user_id" value="{{ $user['id'] }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
 
                                 <!-- Password Modal -->
                                 <div class="modal fade" id="passwordModal{{ $user['shop_id'] }}{{ $user['id'] }}" tabindex="-1" role="dialog" aria-hidden="true">
