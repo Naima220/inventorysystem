@@ -156,11 +156,26 @@ class DashboardController extends Controller
             'admin_password'         => $request->admin_password,
         ]);
 
-        // STEP 2: Register subdomain
-        $centralDomain = parse_url(config('app.url'), PHP_URL_HOST) ?? 'localhost';
-        $centralDomain = explode(':', $centralDomain)[0];
+        // STEP 2: Register subdomain (automatically detect base domain)
+        $host = request()->getHost();
+        $centralDomains = config('tenancy.central_domains', []);
+        $matchedCentralDomain = 'minemarket.tech'; // Safe production fallback
+        
+        foreach ($centralDomains as $cd) {
+            if ($cd !== '127.0.0.1' && $cd !== 'localhost' && (str_ends_with($host, $cd) || $host === $cd)) {
+                $matchedCentralDomain = $cd;
+                break;
+            }
+        }
+        
+        // Local environment fallback
+        if ($host === 'localhost' || $host === '127.0.0.1') {
+            $centralDomain = parse_url(config('app.url'), PHP_URL_HOST) ?? 'localhost';
+            $matchedCentralDomain = explode(':', $centralDomain)[0];
+        }
+
         $shop->domains()->create([
-            'domain' => strtolower($shopId) . '.' . $centralDomain
+            'domain' => strtolower($shopId) . '.' . $matchedCentralDomain
         ]);
 
         // STEP 3: Insert admin user directly into tenant SQLite database via PDO
