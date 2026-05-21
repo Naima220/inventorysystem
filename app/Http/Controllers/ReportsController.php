@@ -83,7 +83,7 @@ class ReportsController extends Controller
     $data['remaining_debts'] =
     Debt::sum('amount') - DB::table('debt_payments')->sum('paid_amount');
 
-        return view('admin.Reports.general', compact('data'));
+        return view('admin.reports.general', compact('data'));
     }
 
     // 🟨 ORDERS
