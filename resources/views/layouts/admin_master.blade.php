@@ -264,9 +264,11 @@
                     <div class="dropdown-divider"></div>
                 @endif
 
+                @if(!in_array(request()->getHost(), config('tenancy.central_domains')))
                 <a class="dropdown-item" href="{{ route('activity.logs') }}">
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i> Activity Log
                 </a>
+                @endif
 
                 <div class="dropdown-divider"></div>
 
