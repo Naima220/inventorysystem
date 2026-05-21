@@ -115,9 +115,9 @@ Route::middleware([
     // ADMIN ONLY MODULES
     Route::middleware(['auth', 'role:super_admin|admin|Admin'])->group(function () {
         // Suppliers
-        Route::get('/add-supplier', [SupplierController::class, 'addSupplier'])->name('add.supplier');
-        Route::post('/all-suppliers', [SupplierController::class, 'storeSupplier'])->name('store.supplier');
-        Route::get('/all-suppliers', [SupplierController::class, 'allSuppliers'])->name('all.suppliers');
+        Route::get('/add-supplier', [SupplierController::class, 'create'])->name('add.supplier');
+        Route::post('/all-suppliers', [SupplierController::class, 'store'])->name('store.supplier');
+        Route::get('/all-suppliers', [SupplierController::class, 'index'])->name('all.suppliers');
         Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
         Route::put('/suppliers/{id}/update', [SupplierController::class, 'update'])->name('suppliers.update');
         Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');

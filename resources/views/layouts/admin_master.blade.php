@@ -264,7 +264,9 @@
 
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-light">
-    <a class="navbar-brand" href="{{ in_array(request()->getHost(), config('tenancy.central_domains')) ? route('superadmin.dashboard') : route('dashboard') }}">Market system</a>
+    <a class="navbar-brand" href="{{ in_array(request()->getHost(), config('tenancy.central_domains')) ? route('superadmin.dashboard') : route('dashboard') }}" style="font-size: 1.35rem; font-family: 'Outfit', 'Inter', sans-serif; letter-spacing: 0.5px; display: inline-block;">
+        <span style="font-weight: 800; color: #0b223f;">Market</span><span style="font-weight: 400; color: #0d6efd; margin-left: 3px;">system</span>
+    </a>
 
     <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle">
         <i class="fas fa-bars"></i>

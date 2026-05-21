@@ -43,8 +43,11 @@
                         <div class="mb-3">
                             <label class="form-label"><i class="fas fa-user-tag"></i> Role</label>
                             <select name="role" class="form-control" required>
-                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
-                                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                                        {{ $role->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 

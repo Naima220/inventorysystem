@@ -25,7 +25,7 @@ class EmployeeController extends Controller
     {
         $request->validate([
             'name'      => 'required|string|max:255',
-            'email'     => 'required|email',
+            'email'     => 'nullable|email',
             'phone'     => 'required|string|max:20',
             'address'   => 'required|string|max:255',
             'position'  => 'required|string|max:100',
@@ -53,7 +53,7 @@ class EmployeeController extends Controller
 
         $request->validate([
             'name'      => 'required|string|max:255',
-            'email'     => 'required|email',
+            'email'     => 'nullable|email',
             'phone'     => 'required|string|max:20',
             'address'   => 'required|string|max:255',
             'position'  => 'required|string|max:100',
