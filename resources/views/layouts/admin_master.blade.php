@@ -240,10 +240,13 @@
             }
         }
 
-        /* Prevent scrolling when sidebar is open on mobile */
-        @media (max-width: 991.98px) {
-            body.sb-sidenav-toggled {
-                overflow: hidden;
+        /* Ensure navbar brand is always visible on desktop and sidebar starts below topbar */
+        @media (min-width: 992px) {
+            .sb-topnav.navbar {
+                z-index: 1040 !important;
+            }
+            .sb-nav-fixed #layoutSidenav #layoutSidenav_nav {
+                top: 56px !important;
             }
         }
 
