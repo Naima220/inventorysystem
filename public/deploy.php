@@ -20,18 +20,23 @@ chdir(__DIR__ . '/..');
 echo "<pre>";
 echo "Current working directory: " . getcwd() . "\n\n";
 
-// Execute git pull
-echo "🔄 Executing: git pull origin main\n";
+// 1. Execute git pull
+echo "🔄 === 1. GIT PULL ===\n";
 $gitOutput = shell_exec('git pull origin main 2>&1');
 echo htmlspecialchars($gitOutput) . "\n";
 
-// Execute artisan view:clear
-echo "🧹 Executing: php artisan view:clear\n";
+// 2. Execute migrations for tenants
+echo "🗄️ === 2. RUN TENANT MIGRATIONS ===\n";
+$migrationsOutput = shell_exec('php artisan tenants:migrate --force 2>&1');
+echo htmlspecialchars($migrationsOutput) . "\n";
+
+// 3. Clear view cache
+echo "🧹 === 3. CLEAR VIEW CACHE ===\n";
 $viewOutput = shell_exec('php artisan view:clear 2>&1');
 echo htmlspecialchars($viewOutput) . "\n";
 
-// Execute artisan config:clear
-echo "🧹 Executing: php artisan config:clear\n";
+// 4. Clear config cache
+echo "🧹 === 4. CLEAR CONFIG CACHE ===\n";
 $configOutput = shell_exec('php artisan config:clear 2>&1');
 echo htmlspecialchars($configOutput) . "\n";
 
