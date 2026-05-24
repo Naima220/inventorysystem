@@ -190,6 +190,9 @@ Route::middleware([
 
     // Activity Logs
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->middleware(['auth'])->name('activity.logs');
+
+    // Chatbot
+    Route::post('/chatbot', [\App\Http\Controllers\ChatbotController::class, 'reply'])->middleware(['auth']);
 });
 
 // Subscription expired (Outside main middleware to avoid loop)

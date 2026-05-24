@@ -174,9 +174,19 @@ class ChatbotController extends Controller
         }
 
         // Sales today
-        if (str_contains($msg, 'sales maanta') || str_contains($msg, 'inta iib maanta dhacay') || str_contains($msg, 'iibka maanta')) {
+        if (
+            str_contains($msg, 'sales maanta') || 
+            str_contains($msg, 'inta iib maanta dhacay') || 
+            str_contains($msg, 'iibka maanta') ||
+            str_contains($msg, 'iib maanta')
+        ) {
             $count = DB::table('invoices')->whereDate('created_at', Carbon::today())->count();
-            return response()->json(['reply' => "🛒 Maanta waxaa dhacay **$count sales**."]);
+            $total = DB::table('invoice_items')->whereDate('created_at', Carbon::today())->sum('total_price');
+            return response()->json([
+                'reply' => "🛒 **Iibka Maanta:**\n\n"
+                         . "• **Tirada Iibka (Count)**: $count sales\n"
+                         . "• **Lacagta Guud (Total Amount)**: $" . number_format($total, 2)
+            ]);
         }
 
         // Money today
@@ -262,6 +272,36 @@ class ChatbotController extends Controller
                          . "• **Mushaharka guud ee bishii** laga rabto dukaanka: $" . number_format($totalSalary, 2) . "\n"
                          . "• **Wixii la bixiyay guud ahaan**: $" . number_format($paidSalaries, 2)
             ]);
+        }
+
+        // Order queries (e.g. imisa order, orders today, orders count)
+        if (
+            str_contains($msg, 'order') || 
+            str_contains($msg, 'dalab') || 
+            str_contains($msg, 'dalabaad') || 
+            str_contains($msg, 'orders')
+        ) {
+            if (
+                str_contains($msg, 'imisa') || 
+                str_contains($msg, 'count') || 
+                str_contains($msg, 'maanta') || 
+                str_contains($msg, 'sugan') || 
+                str_contains($msg, 'pending') ||
+                str_contains($msg, 'tirada')
+            ) {
+                $pendingOrders = DB::table('orders')->where('order_status', 0)->count();
+                $deliveredOrders = DB::table('orders')->where('order_status', 1)->count();
+                $totalOrders = DB::table('orders')->count();
+                $todayOrders = DB::table('orders')->whereDate('created_at', Carbon::today())->count();
+
+                return response()->json([
+                    'reply' => "📦 **Warbixinta Dalabaadka (Orders):**\n\n"
+                             . "• **Wadar ahaan (Total)**: $totalOrders orders\n"
+                             . "• **Maanta cusub (Today)**: $todayOrders orders\n"
+                             . "• **Sugaya (Pending)**: $pendingOrders orders\n"
+                             . "• **La keenay (Delivered)**: $deliveredOrders orders"
+                ]);
+            }
         }
 
         // 7. CUSTOMERS & SUPPLIERS
