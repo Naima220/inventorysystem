@@ -817,7 +817,7 @@
 
                     <!-- ADMIN ONLY -->
                     @if(!in_array(request()->getHost(), config('tenancy.central_domains')))
-                    @role('super_admin|Admin|admin')
+                    @hasanyrole('super_admin|Admin|admin')
 
                     <!-- Suppliers -->
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSuppliers">
@@ -928,7 +928,7 @@
                             <a class="nav-link" href="{{ route('reports.general') }}">General Report</a>
                         </nav>
                     </div>
-                    @endrole
+                    @endhasanyrole
                     @endif
 
                     @role('super_admin')
