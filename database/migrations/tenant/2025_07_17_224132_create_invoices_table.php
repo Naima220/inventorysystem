@@ -19,6 +19,7 @@ class CreateInvoicesTable extends Migration
         $table->string('customer_name');
         $table->string('customer_phone');
         $table->decimal('debt', 10, 2)->default(0);
+        $table->decimal('total_amount', 10, 2)->default(0.00);
         $table->timestamps();
 
         // Foreign key constraint (optional but recommended)
