@@ -24,7 +24,7 @@ Route::get('/', function () {
 // ✅ Subscription expired page
 Route::get('/subscription-expired', function () {
     return view('subscription.expired');
-})->name('subscription.expired');
+})->name('central.subscription.expired');
 
 // ✅ Super Admin Dashboard
 Route::middleware(['auth', 'role:super_admin'])
