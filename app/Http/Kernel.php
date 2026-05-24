@@ -53,6 +53,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'super_admin' => \App\Http\Middleware\SuperAdminMiddleware::class,
         'check.subscription' => \App\Http\Middleware\CheckSubscription::class,
+        'central.domain' => \App\Http\Middleware\PreventTenantAccessToCentralRoutes::class,
         // ✅ Spatie Permissions Middleware
     'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
     'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
