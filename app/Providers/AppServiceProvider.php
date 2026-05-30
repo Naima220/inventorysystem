@@ -14,7 +14,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Fix for shared hosting where base_path might resolve to public directory
+        $dbPath = base_path('database');
+        if (strpos($dbPath, 'public' . DIRECTORY_SEPARATOR . 'database') !== false) {
+            $realBasePath = str_replace(DIRECTORY_SEPARATOR . 'public', '', base_path());
+            $this->app->useDatabasePath($realBasePath . DIRECTORY_SEPARATOR . 'database');
+        }
     }
 
     /**
