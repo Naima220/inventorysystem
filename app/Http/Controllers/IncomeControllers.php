@@ -17,8 +17,9 @@ class IncomeControllers extends Controller
         $totalIncome = Payment::whereYear('created_at', $year)->sum('paid');
         $totalSalaries = Salary::whereYear('created_at', $year)->sum('amount');
         $totalExpenses = Expense::whereYear('created_at', $year)->sum('amount');
+        $totalPurchases = \App\Models\SupplierPurchase::whereYear('created_at', $year)->sum('paid');
         
-        $totalOutcome = $totalSalaries + $totalExpenses;
+        $totalOutcome = $totalSalaries + $totalExpenses + $totalPurchases;
         $profit = $totalIncome - $totalOutcome;
 
         // Monthly Breakdown
@@ -29,7 +30,9 @@ class IncomeControllers extends Controller
             $monthIncome = Payment::whereYear('created_at', $year)->whereMonth('created_at', $i)->sum('paid');
             $monthSalaries = Salary::whereYear('created_at', $year)->whereMonth('created_at', $i)->sum('amount');
             $monthExpenses = Expense::whereYear('created_at', $year)->whereMonth('created_at', $i)->sum('amount');
-            $monthOutcome = $monthSalaries + $monthExpenses;
+            $monthPurchases = \App\Models\SupplierPurchase::whereYear('created_at', $year)->whereMonth('created_at', $i)->sum('paid');
+            
+            $monthOutcome = $monthSalaries + $monthExpenses + $monthPurchases;
             
             $monthlyData[] = [
                 'month' => $months[$i - 1],
@@ -48,6 +51,7 @@ class IncomeControllers extends Controller
             'totalIncome',
             'totalSalaries',
             'totalExpenses',
+            'totalPurchases',
             'totalPayments',
             'totalOutcome',
             'profit',

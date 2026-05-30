@@ -76,11 +76,23 @@
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Total Outcome
+                            Total Outcome (Kharashka Guud)
                             <span class="badge bg-danger rounded-pill">${{ number_format($totalOutcome, 2) }}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Total Income (Payments)
+                        <li class="list-group-item d-flex justify-content-between align-items-center text-muted small">
+                            ├─ Product Purchases (Alaab iibsi)
+                            <span>${{ number_format($totalPurchases, 2) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center text-muted small">
+                            ├─ Employee Salaries (Mushaar)
+                            <span>${{ number_format($totalSalaries, 2) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center text-muted small">
+                            ├─ General Expenses (Kharash Kale)
+                            <span>${{ number_format($totalExpenses, 2) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center mt-2 border-top">
+                            Total Income (Dakhli)
                             <span class="badge bg-success rounded-pill">${{ number_format($totalPayments, 2) }}</span>
                         </li>
                     </ul>
