@@ -43,10 +43,13 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
-            // Register central web routes with central.domain middleware
-            Route::middleware(['web', 'central.domain'])
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
+            // Register central web routes with domain grouping to prevent tenant route conflicts
+            foreach ($this->centralDomains() as $domain) {
+                Route::middleware(['web', 'central.domain'])
+                    ->domain($domain)
+                    ->namespace($this->namespace)
+                    ->group(base_path('routes/web.php'));
+            }
         });
     }
 
