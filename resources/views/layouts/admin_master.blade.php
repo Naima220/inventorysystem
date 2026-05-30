@@ -104,7 +104,33 @@
         /* SIDEBAR NAV */
         .sb-sidenav {
             height: 100%;
+            overflow-y: auto !important;
+            overflow-x: hidden;
+        }
+        
+        .sb-sidenav-menu {
+            height: 100%;
             overflow-y: auto;
+            padding-bottom: 80px; /* Extra padding at bottom to ensure last item is visible */
+        }
+        
+        /* Custom scrollbar for sidebar */
+        .sb-sidenav::-webkit-scrollbar,
+        .sb-sidenav-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sb-sidenav::-webkit-scrollbar-track,
+        .sb-sidenav-menu::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1); 
+        }
+        .sb-sidenav::-webkit-scrollbar-thumb,
+        .sb-sidenav-menu::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2); 
+            border-radius: 10px;
+        }
+        .sb-sidenav::-webkit-scrollbar-thumb:hover,
+        .sb-sidenav-menu::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.4); 
         }
 
         .sb-sidenav-dark {
