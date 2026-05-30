@@ -861,6 +861,20 @@
                         </nav>
                     </div>
 
+                    <!-- Supplier Purchases -->
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSupplierPurchases">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-basket"></i></div>
+                        Alaab Soo Iibsi
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseSupplierPurchases" data-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="{{ route('supplier-purchases.index') }}">All Purchases</a>
+                            <a class="nav-link" href="{{ route('supplier-purchases.create') }}">Buy Existing Product</a>
+                            <a class="nav-link" href="{{ route('supplier-purchases.create-new') }}">Add New Product</a>
+                        </nav>
+                    </div>
+
                     <!-- Payments -->
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePayments">
                         <div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
