@@ -29,3 +29,7 @@ yarn-error.log
 
 # Tenant Assets
 /storage/app/public/tenant*
+
+# Tenant Databases
+/database/tenant*
+!/database/migrations/
