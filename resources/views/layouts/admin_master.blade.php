@@ -864,7 +864,7 @@
                     <!-- Supplier Purchases -->
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSupplierPurchases">
                         <div class="sb-nav-link-icon"><i class="fas fa-shopping-basket"></i></div>
-                        Alaab Soo Iibsi
+                        Supplier Purchases
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
                     <div class="collapse" id="collapseSupplierPurchases" data-parent="#sidenavAccordion">

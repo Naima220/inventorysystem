@@ -116,7 +116,7 @@ Route::middleware([
     Route::middleware(['auth', 'role:super_admin|admin|Admin'])->group(function () {
         // Suppliers
         Route::get('/add-supplier', [SupplierController::class, 'create'])->name('add.supplier');
-        Route::post('/all-suppliers', [SupplierController::class, 'store'])->name('store.supplier');
+        Route::post('/insert-supplier', [SupplierController::class, 'store'])->name('store.supplier');
         Route::get('/all-suppliers', [SupplierController::class, 'index'])->name('all.suppliers');
         Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
         Route::put('/suppliers/{id}/update', [SupplierController::class, 'update'])->name('suppliers.update');
@@ -159,9 +159,9 @@ Route::middleware([
         Route::delete('/debts/delete/{id}', [DebtController::class, 'destroy'])->name('debt.delete');
 
         // Supplier Purchases
-        Route::resource('supplier-purchases', SupplierPurchaseController::class);
         Route::get('supplier-purchases/create-new', [SupplierPurchaseController::class, 'createNew'])->name('supplier-purchases.create-new');
         Route::post('supplier-purchases/storeNew', [SupplierPurchaseController::class, 'storeNew'])->name('supplier-purchases.storeNew');
+        Route::resource('supplier-purchases', SupplierPurchaseController::class);
 
         // Reports
         Route::get('/reports/invoices', [\App\Http\Controllers\InvoicesReportController::class, 'index'])->name('reports.invoices');

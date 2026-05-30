@@ -12,13 +12,13 @@
 
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3><i class="fas fa-shopping-basket mr-2 text-primary"></i>Alaab Soo Iibsi (Supplier Purchases)</h3>
+        <h3><i class="fas fa-shopping-basket mr-2 text-primary"></i>Supplier Purchases</h3>
         <div>
             <a href="{{ route('supplier-purchases.create') }}" class="btn btn-primary mr-2">
-                <i class="fas fa-plus mr-1"></i> Alaab Jira Soo Iibso
+                <i class="fas fa-plus mr-1"></i> Buy Existing Product
             </a>
             <a href="{{ route('supplier-purchases.create-new') }}" class="btn btn-success">
-                <i class="fas fa-plus-circle mr-1"></i> Alaab Cusub + Iibsi
+                <i class="fas fa-plus-circle mr-1"></i> Add New Product & Purchase
             </a>
         </div>
     </div>
