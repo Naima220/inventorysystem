@@ -67,9 +67,11 @@
 @php
     // Use tenant helper to get dynamic shop information
     $shopName = tenant('name') ?? 'Mine Market';
-    $shopAddress = tenant('address') ?? 'Address Not Set';
+    $shopAddress = 'Hargeisa, Somaliland';
     $shopPhone = tenant('phone') ?? 'N/A';
-    $shopEmail = tenant('email') ?? 'N/A';
+    // Get owner email: first try tenant data, then get from first admin user
+    $ownerUser = \App\Models\User::orderBy('id')->first();
+    $shopEmail = tenant('email') ?? ($ownerUser ? $ownerUser->email : 'N/A');
 @endphp
 
 {{-- ✅ HEADER (Dynamic Shop Info) --}}
