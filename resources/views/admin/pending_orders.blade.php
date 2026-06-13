@@ -2,60 +2,7 @@
 
 @section('content')
 
-<style>
-/* ============ MOBILE RESPONSIVE ============ */
-@media (max-width: 768px) {
 
-    #dataTable thead {
-        display: none;
-    }
-
-    #dataTable,
-    #dataTable tbody,
-    #dataTable tr,
-    #dataTable td {
-        display: block;
-        width: 100%;
-    }
-
-    #dataTable tr {
-        background: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 15px;
-    }
-
-    #dataTable td {
-        border: none;
-        padding: 6px 0;
-        font-size: 14px;
-    }
-
-    #dataTable td::before {
-        font-weight: bold;
-        display: block;
-        color: #555;
-    }
-
-    #dataTable td:nth-of-type(1)::before { content: "#"; }
-    #dataTable td:nth-of-type(2)::before { content: "Customer Name"; }
-    #dataTable td:nth-of-type(3)::before { content: "Customer Phone"; }
-    #dataTable td:nth-of-type(4)::before { content: "Order Items"; }
-    #dataTable td:nth-of-type(5)::before { content: "Status"; }
-    #dataTable td:nth-of-type(6)::before { content: "Action"; }
-
-    #dataTable td ul {
-        padding-left: 15px;
-    }
-
-    #dataTable td .btn,
-    #dataTable td form button {
-        width: 100%;
-        margin-bottom: 6px;
-    }
-}
-</style>
 
 <div class="card mb-4">
     <div class="card-header">
