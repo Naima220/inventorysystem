@@ -42,7 +42,7 @@ class IncomeControllers extends Controller
             ];
         }
 
-        $availableYears = range(date('Y') - 5, date('Y') + 1);
+        $availableYears = range(2025, 2030);
         $totalPayments = $totalIncome; // For backward compatibility
 
         return view('admin.income_outcome', compact(
